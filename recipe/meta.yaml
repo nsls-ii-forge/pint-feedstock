@@ -1,0 +1,45 @@
+{% set name = "Pint" %}
+{% set version = "0.16.1" %}
+{% set sha256 = "d43a2e9ae003164978b60fdf8cd920d8581e1a5991df8dded29b00f4850ec83a" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: {{ sha256 }}
+
+build:
+  noarch: python
+  script: SETUPTOOLS_SCM_PRETEND_VERSION={{ version }} {{ PYTHON }} -m pip install . -v
+  number: 0
+
+requirements:
+  host:
+    - python >=3.6
+    - pip
+    - setuptools >=45
+    - setuptools_scm >=3.4
+    - toml
+  run:
+    - python >=3.6
+    - importlib_metadata
+    - importlib_resources
+    - packaging
+    - setuptools
+
+test:
+  imports:
+    - pint
+  commands:
+    - python -c "import pint; ver = pint.__version__; assert ver != '0.0.0'"
+
+about:
+  home: https://github.com/hgrecco/pint
+  license: BSD-3-Clause
+  license_family: BSD
+  license_file: LICENSE
+  summary: Operate and manipulate physical quantities in Python
+  doc_url: http://pint.readthedocs.org/
+  dev_url: https://github.com/hgrecco/pint
